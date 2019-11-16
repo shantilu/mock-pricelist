@@ -1,6 +1,7 @@
 # light-front
 
 ## Back-end setup
+Back end is built on python 3.5+
 ```
 pip install websockets
 ```
@@ -11,6 +12,7 @@ python app.py
 ```
 
 ## Front-end setup
+Front end is built with npm or yarn
 ```
 yarn install
 ```
