@@ -70,13 +70,15 @@
                         <v-subheader>PRICES</v-subheader>
                         <ol>
                             <li
-                                    v-for="(value, j) in item.valueList.slice(0,100)"
+                                    v-for="(value, j) in item.valueList.slice(0,item.length)"
                                     :key="j"
                                     :class="{'positive': value>item.benchmark, 'negative': value<item.benchmark }"
                             >
                                 <span v-text="value"></span>
                             </li>
                         </ol>
+
+                        <v-btn outlined color="indigo" v-on:click="item.length= item.length===100?500:100">Show {{item.length===100?'more':'less'}}</v-btn>
 
                     </v-card-text>
                 </v-card>
@@ -124,18 +126,22 @@
                 {
                     "symbol": "AAAA",
                     "benchmark": 105,
+                    "length":100,
                     "valueList": []
                 }, {
                     "symbol": "BBBB",
                     "benchmark": 105,
+                    "length":100,
                     "valueList": []
                 }, {
                     "symbol": "CCCC",
                     "benchmark": 105,
+                    "length":100,
                     "valueList": []
                 }, {
                     "symbol": "DDDD",
                     "benchmark": 105,
+                    "length":100,
                     "valueList": []
                 }
 

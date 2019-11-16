@@ -1,6 +1,16 @@
 # light-front
 
-## Project setup
+## Back-end setup
+```
+pip install websockets
+```
+
+### Compiles and hot-reloads for development
+```
+python app.py
+```
+
+## Front-end setup
 ```
 yarn install
 ```
@@ -15,10 +25,3 @@ yarn serve
 yarn build
 ```
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
