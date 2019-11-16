@@ -1,6 +1,9 @@
 .DS_Store
 node_modules
 /dist
+.idea/
+
+test.html
 
 # local env files
 .env.local
