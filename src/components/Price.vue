@@ -43,9 +43,6 @@
                 >
                     <v-card-text>
 
-
-
-
                         <v-sheet
                                 class="v-sheet--offset mx-auto"
                         >
@@ -53,7 +50,8 @@
                                     :value="item.valueList.slice(0,60)"
                                     color="deep-purple accent-4"
                                     line-width="0.3"
-                                    padding="5"
+                                    :smooth="16"
+                                    max-height="200px"
                             ></v-sparkline>
                         </v-sheet>
 
@@ -78,7 +76,7 @@
                             </li>
                         </ol>
 
-                        <v-btn outlined color="indigo" v-on:click="item.length= item.length===100?500:100">Show {{item.length===100?'more':'less'}}</v-btn>
+                        <v-btn outlined color="deep-purple" v-on:click="item.length= item.length===100?500:100">Show {{item.length===100?'more':'less'}}</v-btn>
 
                     </v-card-text>
                 </v-card>
