@@ -3,7 +3,7 @@
 # WS server that sends messages at random intervals
 
 import asyncio
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import randint
 import websockets
 import json
@@ -11,6 +11,9 @@ from settings import SETTINGS
 
 update_frequency_milliseconds = SETTINGS["update_frequency_milliseconds"]
 symbol_list = SETTINGS["symbols"]
+
+DATA_STORAGE = []
+
 
 class LighthouseToyServer:
     def __init__(self, symbols=None, update_frequency_milliseconds=500, elements_per_update=50):
@@ -31,13 +34,43 @@ async def consumer_handler(websocket, path):
                 await websocket.send(json.dumps({"type": "notice", "msg": frequency}))
             except:
                 print("error")
+        time_range = data.get("range", None)
+        if time_range is not None:
+            result = query_range(time_range[0], time_range[1])
+            await websocket.send(json.dumps({"type": "query", "data": result}))
+
+
+def add_new_data(item):
+    DATA_STORAGE.append(item)
+    if DATA_STORAGE[0]["timestamp"] < (int(datetime.now().timestamp()) - 400):
+        DATA_STORAGE.pop(0)
+
+
+def query_range(start, end):
+    start_time = int(datetime.now().timestamp()) + start
+    end_time = int(datetime.now().timestamp()) + end
+    result = [-4, -1]
+    for i in range(len(DATA_STORAGE)):
+        if DATA_STORAGE[i]["timestamp"] > start_time:
+            result[0] = i
+            break
+    for j in range(len(DATA_STORAGE)):
+        if DATA_STORAGE[len(DATA_STORAGE) - 1 - j]["timestamp"] < end_time:
+            result[1] = len(DATA_STORAGE) - 1 - j
+            break
+    if result[0] < result[1]:
+        return DATA_STORAGE[result[0]:result[1]]
+    return DATA_STORAGE[-4:]
 
 
 async def producer():
     result = []
+    d = datetime.now()
     for i in range(SETTINGS['elements_per_update']):
-        result.append({"symbol": symbol_list[i%4], "price": 100 + randint(1, 10),
-                       "time": datetime.utcnow().isoformat() + "Z"})
+        item = {"symbol": symbol_list[i % 4], "price": 100 + randint(1, 10), "time": d.isoformat() + "Z",
+                "timestamp": int(d.timestamp())}
+        result.append(item)
+        add_new_data(item)
     return json.dumps(result)
 
 

@@ -111,7 +111,7 @@
 
 <script>
     export default {
-        name: 'HelloWorld',
+        name: 'Price',
 
         data: () => ({
             snackbar:{

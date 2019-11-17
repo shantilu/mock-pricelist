@@ -31,8 +31,9 @@
 
     <v-content>
       <v-container>
-        <HelloPrice/>
-
+        <v-card max-width="850" class="mx-auto">
+        <PriceUpdate/>
+        </v-card>
       </v-container>
 
     </v-content>
@@ -40,13 +41,13 @@
 </template>
 
 <script>
-import HelloPrice from './components/Price';
+import PriceUpdate from './components/PriceUpdate';
 
 export default {
   name: 'App',
 
   components: {
-      HelloPrice,
+      PriceUpdate,
   },
 
   data: () => ({
