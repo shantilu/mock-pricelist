@@ -1,6 +1,6 @@
 <template>
     <div>
-
+        <v-card-text>
         <v-row>
             <v-col cols="10">
                 <v-text-field
@@ -11,9 +11,10 @@
 
             </v-col>
             <v-col>
-                <v-btn outlined color="deep-purple accent-4" dark v-on:click="setUpdateFrequency">Submit</v-btn>
+                <v-btn outlined color="indigo" dark v-on:click="setUpdateFrequency">Submit</v-btn>
             </v-col>
         </v-row>
+        </v-card-text>
 
         <v-tabs
                 fixed-tabs
@@ -49,6 +50,8 @@
 
                         <v-divider></v-divider>
 
+
+
                         <v-simple-table
                                 dense
                                 fixed-header
@@ -63,7 +66,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-for="(item, index) in prices.filter(item=>(item.symbol===symbolFilter)||(symbolFilter==='')).slice(0, length)" :key="index"
+                                <tr v-for="(item, index) in prices.filter(item=>(item.symbol===symbolFilter)||(symbolFilter==='')).slice(0, displayLength)" :key="index"
                                     :class="{'positive': item.price>benchmark, 'negative': item.price<benchmark }">
                                     <td>{{index+1}}</td>
                                     <td>{{ item.symbol }}</td>
@@ -73,6 +76,13 @@
                                 </tbody>
                             </template>
                         </v-simple-table>
+
+                        <v-spacer></v-spacer>
+                        <div class="my-3">
+                            <v-btn outlined color="indigo" v-on:click="displayLength= displayLength===100?500:100">Show {{displayLength===100?'more':'less'}}</v-btn>
+                        </div>
+
+
                     </div>
                 </v-card>
             </v-tab-item>
@@ -106,7 +116,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="(item, index) in queryResult.slice(0, length)" :key="index"
+                            <tr v-for="(item, index) in queryResult" :key="index"
                                 :class="{'positive': item.price>benchmark, 'negative': item.price<benchmark }">
                                 <td>{{index+1}}</td>
                                 <td>{{ item.symbol }}</td>
@@ -150,7 +160,7 @@
             websocket: null,
             benchmark: 105,
             frequency: 300,
-            length: 100,
+            displayLength: 100,
             prices: [],
             symbols: [''],
             symbolFilter: '',
@@ -185,7 +195,12 @@
         },
         methods: {
             setUpdateFrequency: function () {
-                this.websocket.send(JSON.stringify({frequency: parseInt(this.frequency)}));
+                const updated = parseInt(this.frequency);
+                if (updated<100){
+                    alert("frequency less than 100 is not supported");
+                    return
+                }
+                this.websocket.send(JSON.stringify({frequency: updated}));
             },
             queryTimeRange: function () {
                 this.websocket.send(JSON.stringify({range: this.queryRange}));
